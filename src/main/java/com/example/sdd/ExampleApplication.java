@@ -1,8 +1,10 @@
 package com.example.sdd;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 
@@ -23,6 +25,11 @@ public class ExampleApplication {
             System.out.print(name + "; ");
         }
         System.out.println("\n" + beanNames.length + " beans listed");
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 
 }

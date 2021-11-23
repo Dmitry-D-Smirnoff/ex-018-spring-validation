@@ -22,7 +22,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "example018", name = "t_role")
+@Table(name = "t_role")
 public class Role implements GrantedAuthority {
 
     @Id

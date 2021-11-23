@@ -25,7 +25,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "example018", name = "t_user")
+@Table(name = "t_user")
 public class User implements UserDetails {
 
     @Id

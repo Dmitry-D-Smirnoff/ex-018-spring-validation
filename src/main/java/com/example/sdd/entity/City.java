@@ -1,6 +1,5 @@
 package com.example.sdd.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,7 @@ import javax.persistence.Table;
 @Getter
 @Entity
 @NamedQuery(name="City.findAll", query="Select c from City c order by c.id asc")
-@Table(schema = "example018", name = "t_city")
+@Table(name = "t_city")
 public class City {
 
     @Id
@@ -30,7 +29,5 @@ public class City {
 
     @ManyToOne
     @JoinColumn(name = "country_id")
-    @JsonBackReference
     private Country country;
-
 }

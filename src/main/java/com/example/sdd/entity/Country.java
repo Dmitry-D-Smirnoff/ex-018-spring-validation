@@ -1,6 +1,5 @@
 package com.example.sdd.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +19,7 @@ import java.util.List;
 @Getter
 @Entity
 @NamedQuery(name="Country.findAll", query="Select c from Country c order by c.id asc")
-@Table(schema = "example018", name = "t_country")
+@Table(name = "t_country")
 public class Country {
 
     @Id
@@ -31,7 +30,6 @@ public class Country {
     private String countryName;
 
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<City> cities;
 
 }
