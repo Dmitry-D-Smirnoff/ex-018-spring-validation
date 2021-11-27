@@ -2,8 +2,6 @@ package com.example.sdd.dao.impl;
 
 import com.example.sdd.dao.CityDao;
 import com.example.sdd.entity.City;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +17,8 @@ import java.util.List;
 @Transactional
 public class CityDaoImpl implements CityDao {
 
-    private final Log log = LogFactory.getLog(getClass());
-
     @PersistenceContext
     private EntityManager entityManager;
-
-    public List<City> findAllCountries() {
-        return entityManager.createNamedQuery("City.findAll", City.class).getResultList();
-    }
 
     public List<City> findAllCities() {
         return entityManager.createNamedQuery("City.findAll", City.class).getResultList();
@@ -41,10 +33,10 @@ public class CityDaoImpl implements CityDao {
         return City;
     }
 
-    public City update(int id, City city) {
-        if (entityManager.find(City.class, id) == null)
-            throw new EntityNotFoundException("No City found for id="+id);
-        city.setId(id);
+    public City update(City city) {
+        //TODO: Перенести проверку в валидатор сущности?
+        if (entityManager.find(City.class, city.getId()) == null)
+            throw new EntityNotFoundException("No City found for id=" + city.getId());
         return entityManager.merge(city);
     }
 
@@ -55,7 +47,7 @@ public class CityDaoImpl implements CityDao {
         }
     }
 
-    private City findCityByName(String cityName){
+    private City findCityByName(String cityName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         ParameterExpression<String> paramName = criteriaBuilder.parameter(String.class);
         CriteriaQuery<City> query = criteriaBuilder.createQuery(City.class);
@@ -65,7 +57,7 @@ public class CityDaoImpl implements CityDao {
 
         List<City> result = entityManager.createQuery(query).setParameter(paramName, cityName).getResultList();
 
-        if(result==null || result.isEmpty())
+        if (result == null || result.isEmpty())
             return null;
         else
             return result.get(0);

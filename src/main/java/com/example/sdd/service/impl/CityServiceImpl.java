@@ -28,8 +28,8 @@ public class CityServiceImpl implements CityService {
         return cityDao.create(city);
     }
 
-    public City updateCity(int id, City city) {
-        return cityDao.update(id, city);
+    public City updateCity(City city) {
+        return cityDao.update(city);
     }
 
     public void deleteCity(int id) {

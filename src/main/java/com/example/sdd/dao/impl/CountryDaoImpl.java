@@ -3,8 +3,6 @@ package com.example.sdd.dao.impl;
 import com.example.sdd.dao.CountryDao;
 import com.example.sdd.entity.City;
 import com.example.sdd.entity.Country;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +17,6 @@ import java.util.List;
 @Repository
 @Transactional
 public class CountryDaoImpl implements CountryDao {
-
-    private final Log log = LogFactory.getLog(getClass());
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -38,17 +34,16 @@ public class CountryDaoImpl implements CountryDao {
         return country;
     }
 
-    public Country update(int id, Country country) {
-        if (entityManager.find(Country.class, id) == null)
-            throw new EntityNotFoundException("No country found for id="+id);
-        country.setId(id);
+    public Country update(Country country) {
+        //TODO: Перенести проверку в валидатор сущности?
+        if (entityManager.find(Country.class, country.getId()) == null)
+            throw new EntityNotFoundException("No country found for id=" + country.getId());
         for (City city : country.getCities()) {
-            City existingCity = findCityByName(city.getCityName());
-            if (existingCity != null){
-                city.setId(existingCity.getId());
-                entityManager.merge(city);
-            }
-            else{
+            City existingCity = entityManager.find(City.class, city.getId());
+            if (existingCity != null) {
+                existingCity.setCityName(city.getCityName());
+                entityManager.merge(existingCity);
+            } else {
                 entityManager.persist(city);
             }
         }
@@ -62,7 +57,7 @@ public class CountryDaoImpl implements CountryDao {
         }
     }
 
-    private City findCityByName(String cityName){
+    private City findCityByName(String cityName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         ParameterExpression<String> paramName = criteriaBuilder.parameter(String.class);
         CriteriaQuery<City> query = criteriaBuilder.createQuery(City.class);
@@ -74,7 +69,7 @@ public class CountryDaoImpl implements CountryDao {
         // Equivalent to:
         // List<City> result = entityManager.createQuery("SELECT s FROM City s WHERE s.cityName = :cityName", City.class).setParameter("cityName", cityName).getResultList();
 
-        if(result==null || result.isEmpty())
+        if (result == null || result.isEmpty())
             return null;
         else
             return result.get(0);

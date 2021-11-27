@@ -12,7 +12,7 @@ public interface CityDao {
 
     City create(City city);
 
-    City update(int id, City city);
+    City update(City city);
 
     void delete(int id);
 

@@ -28,8 +28,8 @@ public class CountryServiceImpl implements CountryService {
         return countryDao.create(country);
     }
 
-    public Country updateCountry(int id, Country country) {
-        return countryDao.update(id, country);
+    public Country updateCountry(Country country) {
+        return countryDao.update(country);
     }
 
     public void deleteCountry(int id) {

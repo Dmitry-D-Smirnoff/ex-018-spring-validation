@@ -12,7 +12,7 @@ public interface CountryDao {
 
     Country create(Country country);
 
-    Country update(int id, Country country);
+    Country update(Country country);
 
     void delete(int id);
 
