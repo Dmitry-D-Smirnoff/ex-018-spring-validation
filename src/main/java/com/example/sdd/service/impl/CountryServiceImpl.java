@@ -1,7 +1,6 @@
 package com.example.sdd.service.impl;
 
 import com.example.sdd.dao.CountryDao;
-import com.example.sdd.entity.City;
 import com.example.sdd.entity.Country;
 import com.example.sdd.service.CountryService;
 import org.springframework.stereotype.Service;
@@ -19,10 +18,6 @@ public class CountryServiceImpl implements CountryService {
 
     public List<Country> getAllCountries() {
         return countryDao.findAllCountries();
-    }
-
-    public List<City> getAllCities() {
-        return countryDao.findAllCities();
     }
 
     public Country getCountryById(int id) {

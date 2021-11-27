@@ -23,15 +23,12 @@ public interface GeoController {
     @GetMapping("/countries")
     List<CountryDto> getAllCountries();
 
-    @GetMapping("/cities")
-    List<CityDto> getAllCities();
-
     @GetMapping("/countries/{countryId}")
     CountryDto getCountryById(@PathVariable("countryId") @Min(2) int id);
 
     @PostMapping("/countries")
     @ResponseStatus(HttpStatus.CREATED)
-    CountryDto createCountry(@Valid @RequestBody CountryDto countryDto); //, BindingResult bindingResult);
+    CountryDto createCountry(@Valid @RequestBody CountryDto countryDto);
 
     @PutMapping("/countries/{countryId}")
     CountryDto updateCountry(@PathVariable("countryId") int id, @RequestBody CountryDto countryDto);
@@ -39,4 +36,22 @@ public interface GeoController {
     @DeleteMapping("/countries/{countryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteCountry(@PathVariable("countryId") int id);
+
+    @GetMapping("/cities")
+    List<CityDto> getAllCities();
+
+    @GetMapping("/cities/{cityId}")
+    CityDto getCityById(@PathVariable("cityId") @Min(2) int id);
+
+    @PostMapping("/cities")
+    @ResponseStatus(HttpStatus.CREATED)
+    CityDto createCity(@Valid @RequestBody CityDto cityDto);
+
+    @PutMapping("/cities/{cityId}")
+    CityDto updateCity(@PathVariable("cityId") int id, @RequestBody CityDto cityDto);
+
+    @DeleteMapping("/cities/{cityId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteCity(@PathVariable("cityId") int id);
+
 }

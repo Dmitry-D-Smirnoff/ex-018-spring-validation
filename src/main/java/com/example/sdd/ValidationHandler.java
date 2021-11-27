@@ -64,7 +64,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
             HttpStatus status,
             HttpHeaders headers
     ){
-        ValidationError error = new ValidationError(
+        ValidationErrorResponse error = new ValidationErrorResponse(
                 mainMessage,
                 errorMessages,
                 status,

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class ValidationError {
+public class ValidationErrorResponse {
 
     private final String message;
     private final List<String> errors;

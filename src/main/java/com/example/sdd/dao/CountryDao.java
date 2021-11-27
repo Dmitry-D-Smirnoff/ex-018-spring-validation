@@ -1,6 +1,5 @@
 package com.example.sdd.dao;
 
-import com.example.sdd.entity.City;
 import com.example.sdd.entity.Country;
 
 import java.util.List;
@@ -8,8 +7,6 @@ import java.util.List;
 public interface CountryDao {
 
     List<Country> findAllCountries();
-
-    List<City> findAllCities();
 
     Country findById(int id);
 

@@ -1,8 +1,7 @@
 package com.example.sdd.dao.impl;
 
-import com.example.sdd.dao.CountryDao;
+import com.example.sdd.dao.CityDao;
 import com.example.sdd.entity.City;
-import com.example.sdd.entity.Country;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
@@ -18,47 +17,41 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class CountryDaoImpl implements CountryDao {
+public class CityDaoImpl implements CityDao {
 
     private final Log log = LogFactory.getLog(getClass());
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Country> findAllCountries() {
-        return entityManager.createNamedQuery("Country.findAll", Country.class).getResultList();
+    public List<City> findAllCountries() {
+        return entityManager.createNamedQuery("City.findAll", City.class).getResultList();
     }
 
-    public Country findById(int id) {
-        return entityManager.find(Country.class, id);
+    public List<City> findAllCities() {
+        return entityManager.createNamedQuery("City.findAll", City.class).getResultList();
     }
 
-    public Country create(Country country) {
-        entityManager.persist(country);
-        return country;
+    public City findById(int id) {
+        return entityManager.find(City.class, id);
     }
 
-    public Country update(int id, Country country) {
-        if (entityManager.find(Country.class, id) == null)
-            throw new EntityNotFoundException("No country found for id="+id);
-        country.setId(id);
-        for (City city : country.getCities()) {
-            City existingCity = findCityByName(city.getCityName());
-            if (existingCity != null){
-                city.setId(existingCity.getId());
-                entityManager.merge(city);
-            }
-            else{
-                entityManager.persist(city);
-            }
-        }
-        return entityManager.merge(country);
+    public City create(City City) {
+        entityManager.persist(City);
+        return City;
+    }
+
+    public City update(int id, City city) {
+        if (entityManager.find(City.class, id) == null)
+            throw new EntityNotFoundException("No City found for id="+id);
+        city.setId(id);
+        return entityManager.merge(city);
     }
 
     public void delete(int id) {
-        Country country = entityManager.find(Country.class, id);
-        if (country != null) {
-            entityManager.remove(country);
+        City City = entityManager.find(City.class, id);
+        if (City != null) {
+            entityManager.remove(City);
         }
     }
 
@@ -71,8 +64,6 @@ public class CountryDaoImpl implements CountryDao {
                 .where(criteriaBuilder.equal(query.from(City.class).get("cityName"), paramName));
 
         List<City> result = entityManager.createQuery(query).setParameter(paramName, cityName).getResultList();
-        // Equivalent to:
-        // List<City> result = entityManager.createQuery("SELECT s FROM City s WHERE s.cityName = :cityName", City.class).setParameter("cityName", cityName).getResultList();
 
         if(result==null || result.isEmpty())
             return null;
