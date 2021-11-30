@@ -2,11 +2,11 @@ package com.example.sdd.entity.validation;
 
 import com.example.sdd.entity.Person;
 import com.example.sdd.service.PersonService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Service

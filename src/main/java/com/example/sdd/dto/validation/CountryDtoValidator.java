@@ -1,13 +1,13 @@
 package com.example.sdd.dto.validation;
 
-import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.CountryDto;
-import org.jetbrains.annotations.NotNull;
+import com.example.sdd.dto.PersonDto;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Service

@@ -7,6 +7,3 @@ INSERT INTO EXAMPLE018.t_person(person_name, country_id) VALUES ('Athens', 2);
 INSERT INTO EXAMPLE018.t_person(person_name, country_id) VALUES ('Paris', 3);
 INSERT INTO EXAMPLE018.t_person(person_name, country_id) VALUES ('Marseille', 3);
 
-INSERT INTO EXAMPLE018.t_role(role_name) VALUES ('ROLE_ADMIN');
-INSERT INTO EXAMPLE018.t_role(role_name) VALUES ('ROLE_USER');
-INSERT INTO EXAMPLE018.t_role(role_name) VALUES ('ROLE_UNUSED');
