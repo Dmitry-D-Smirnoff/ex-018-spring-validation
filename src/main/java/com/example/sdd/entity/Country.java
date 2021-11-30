@@ -23,6 +23,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @NamedQuery(name="Country.findAll", query="Select c from Country c order by c.id asc")
+@NamedQuery(name="Country.findByName", query="Select c from Country c where c.countryName = :name")
 @Table(name = "t_country")
 public class Country {
 
@@ -36,6 +37,6 @@ public class Country {
     private String countryName;
 
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<City> cities;
+    private List<Person> cities;
 
 }

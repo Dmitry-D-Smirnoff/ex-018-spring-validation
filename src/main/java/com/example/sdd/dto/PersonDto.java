@@ -9,12 +9,12 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class CityDto {
+public class PersonDto {
     private Integer id;
 
     @NotNull(message = "Наименование города не может быть пустым")
     @Size(min=2, max=8, message = "Наименование страны должно быть от 2 до 8 символов")
-    private String cityName;
+    private String personName;
 
     @JsonBackReference
     private CountryDto country;

@@ -1,6 +1,6 @@
 package com.example.sdd.validation;
 
-import com.example.sdd.dto.CityDto;
+import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.CountryDto;
 import com.example.sdd.dto.validation.CountryDtoValidator;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import org.springframework.validation.ObjectError;
 import java.util.Arrays;
 
 @SpringBootTest
-public class CityDtoValidationTest {
+public class PersonDtoValidationTest {
 
     @Autowired
     private CountryDtoValidator countryDtoValidator;
@@ -62,10 +62,10 @@ public class CityDtoValidationTest {
         CountryDto countryDto = new CountryDto();
         countryDto.setCountryName("Russia");
 
-        CityDto cityDto = new CityDto();
-        cityDto.setCityName("Moscow");
+        PersonDto personDto = new PersonDto();
+        personDto.setPersonName("Moscow");
 
-        countryDto.setCities(Arrays.asList(cityDto));
+        countryDto.setCities(Arrays.asList(personDto));
         return countryDto;
     }
 

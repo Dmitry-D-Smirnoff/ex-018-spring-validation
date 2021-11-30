@@ -2,9 +2,11 @@ package com.example.sdd.entity.validation;
 
 import com.example.sdd.entity.Country;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+@Service
 public class CountryValidator implements Validator {
 
     @Override

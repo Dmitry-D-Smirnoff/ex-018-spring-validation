@@ -1,11 +1,11 @@
 package com.example.sdd.controller;
 
-import com.example.sdd.dto.CityDto;
+import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.CountryDto;
-import com.example.sdd.dto.validation.CityDtoValidator;
+import com.example.sdd.dto.validation.PersonDtoValidator;
 import com.example.sdd.dto.validation.CountryDtoValidator;
 import com.example.sdd.mapper.GeoMapper;
-import com.example.sdd.service.CityService;
+import com.example.sdd.service.PersonService;
 import com.example.sdd.service.CountryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,17 +32,17 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GeoController {
 
-    private final CityService cityService;
+    private final PersonService personService;
     private final CountryService countryService;
 
     private final GeoMapper geoMapper;
 
     public GeoController(
-            CityService cityService,
+            PersonService personService,
             CountryService countryService,
             GeoMapper geoMapper
     ) {
-        this.cityService = cityService;
+        this.personService = personService;
         this.countryService = countryService;
         this.geoMapper = geoMapper;
     }
@@ -52,9 +52,9 @@ public class GeoController {
         binder.setValidator(new CountryDtoValidator());
     }
 
-    @InitBinder("cityDto")
-    protected void initCityDtoBinder(WebDataBinder binder) {
-        binder.setValidator(new CityDtoValidator());
+    @InitBinder("personDto")
+    protected void initPersonDtoBinder(WebDataBinder binder) {
+        binder.setValidator(new PersonDtoValidator());
     }
 
     @GetMapping("/countries")
@@ -67,6 +67,12 @@ public class GeoController {
     @ResponseStatus(HttpStatus.OK)
     public CountryDto getCountryById(@PathVariable("countryId") @Min(2) int id) {
         return geoMapper.convertToDto(countryService.getCountryById(id));
+    }
+
+    @GetMapping("/countries/byName/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public CountryDto getCountryById(@PathVariable("name") String name) {
+        return geoMapper.convertToDto(countryService.getCountryByName(name));
     }
 
     @PostMapping("/countries")
@@ -89,32 +95,38 @@ public class GeoController {
 
     @GetMapping("/cities")
     @ResponseStatus(HttpStatus.OK)
-    public List<CityDto> getAllCities() {
-        return cityService.getAllCities().stream().map(geoMapper::convertToDto).collect(Collectors.toList());
+    public List<PersonDto> getAllCities() {
+        return personService.getAllCities().stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/cities/{cityId}")
+    @GetMapping("/cities/{personId}")
     @ResponseStatus(HttpStatus.OK)
-    public CityDto getCityById(@PathVariable("cityId") @Min(2) int id) {
-        return geoMapper.convertToDto(cityService.getCityById(id));
+    public PersonDto getPersonById(@PathVariable("personId") @Min(2) int id) {
+        return geoMapper.convertToDto(personService.getPersonById(id));
+    }
+
+    @GetMapping("/cities/byName/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public PersonDto getPersonById(@PathVariable("name") String name) {
+        return geoMapper.convertToDto(personService.getPersonByName(name));
     }
 
     @PostMapping("/cities")
     @ResponseStatus(HttpStatus.CREATED)
-    public CityDto createCity(@Valid @RequestBody CityDto cityDto) {
-        return geoMapper.convertToDto(cityService.createCity(geoMapper.convertToEntity(cityDto)));
+    public PersonDto createPerson(@Valid @RequestBody PersonDto personDto) {
+        return geoMapper.convertToDto(personService.createPerson(geoMapper.convertToEntity(personDto)));
     }
 
     @PutMapping("/cities")
     @ResponseStatus(HttpStatus.OK)
-    public CityDto updateCity(@RequestBody CityDto cityDto) {
-        return geoMapper.convertToDto(cityService.updateCity(geoMapper.convertToEntity(cityDto)));
+    public PersonDto updatePerson(@RequestBody PersonDto personDto) {
+        return geoMapper.convertToDto(personService.updatePerson(geoMapper.convertToEntity(personDto)));
     }
 
-    @DeleteMapping("/cities/{cityId}")
+    @DeleteMapping("/cities/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCity(@PathVariable("cityId") int id) {
-        cityService.deleteCity(id);
+    public void deletePerson(@PathVariable("personId") int id) {
+        personService.deletePerson(id);
     }
 
 }

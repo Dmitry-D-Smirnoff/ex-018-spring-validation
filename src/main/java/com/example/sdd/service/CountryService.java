@@ -10,6 +10,8 @@ public interface CountryService {
 
     Country getCountryById(int id);
 
+    Country getCountryByName(String name);
+
     Country createCountry(Country country);
 
     Country updateCountry(Country country);

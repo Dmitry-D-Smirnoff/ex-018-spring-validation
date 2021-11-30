@@ -24,6 +24,10 @@ public class CountryServiceImpl implements CountryService {
         return countryDao.findById(id);
     }
 
+    public Country getCountryByName(String name) {
+        return countryDao.findByName(name);
+    }
+
     public Country createCountry(Country country) {
         return countryDao.create(country);
     }

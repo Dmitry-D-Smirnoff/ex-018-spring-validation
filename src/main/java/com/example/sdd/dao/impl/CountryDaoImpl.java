@@ -1,7 +1,7 @@
 package com.example.sdd.dao.impl;
 
 import com.example.sdd.dao.CountryDao;
-import com.example.sdd.entity.City;
+import com.example.sdd.entity.Person;
 import com.example.sdd.entity.Country;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +29,11 @@ public class CountryDaoImpl implements CountryDao {
         return entityManager.find(Country.class, id);
     }
 
+    public Country findByName(String name) {
+        return entityManager.createNamedQuery("Country.findByName", Country.class)
+                .setParameter("name", name).getSingleResult();
+    }
+
     public Country create(Country country) {
         entityManager.persist(country);
         return country;
@@ -38,13 +43,13 @@ public class CountryDaoImpl implements CountryDao {
         //TODO: Перенести проверку в валидатор сущности?
         if (entityManager.find(Country.class, country.getId()) == null)
             throw new EntityNotFoundException("No country found for id=" + country.getId());
-        for (City city : country.getCities()) {
-            City existingCity = entityManager.find(City.class, city.getId());
-            if (existingCity != null) {
-                existingCity.setCityName(city.getCityName());
-                entityManager.merge(existingCity);
+        for (Person person : country.getCities()) {
+            Person existingPerson = entityManager.find(Person.class, person.getId());
+            if (existingPerson != null) {
+                existingPerson.setPersonName(person.getPersonName());
+                entityManager.merge(existingPerson);
             } else {
-                entityManager.persist(city);
+                entityManager.persist(person);
             }
         }
         return entityManager.merge(country);
@@ -57,17 +62,17 @@ public class CountryDaoImpl implements CountryDao {
         }
     }
 
-    private City findCityByName(String cityName) {
+    private Person findPersonByName(String personName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         ParameterExpression<String> paramName = criteriaBuilder.parameter(String.class);
-        CriteriaQuery<City> query = criteriaBuilder.createQuery(City.class);
+        CriteriaQuery<Person> query = criteriaBuilder.createQuery(Person.class);
         query
-                .select(query.from(City.class))
-                .where(criteriaBuilder.equal(query.from(City.class).get("cityName"), paramName));
+                .select(query.from(Person.class))
+                .where(criteriaBuilder.equal(query.from(Person.class).get("personName"), paramName));
 
-        List<City> result = entityManager.createQuery(query).setParameter(paramName, cityName).getResultList();
+        List<Person> result = entityManager.createQuery(query).setParameter(paramName, personName).getResultList();
         // Equivalent to:
-        // List<City> result = entityManager.createQuery("SELECT s FROM City s WHERE s.cityName = :cityName", City.class).setParameter("cityName", cityName).getResultList();
+        // List<Person> result = entityManager.createQuery("SELECT s FROM Person s WHERE s.personName = :personName", Person.class).setParameter("personName", personName).getResultList();
 
         if (result == null || result.isEmpty())
             return null;

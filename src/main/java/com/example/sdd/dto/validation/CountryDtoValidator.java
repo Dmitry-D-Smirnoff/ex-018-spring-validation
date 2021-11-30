@@ -1,6 +1,6 @@
 package com.example.sdd.dto.validation;
 
-import com.example.sdd.dto.CityDto;
+import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.CountryDto;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class CountryDtoValidator implements Validator {
             errors.rejectValue("cities", "Перечень городов должен включать хотя бы один город");
         }
 
-        if (!countryDto.getCities().stream().map(CityDto::getCityName).allMatch(StringUtils::hasLength)) {
+        if (!countryDto.getCities().stream().map(PersonDto::getPersonName).allMatch(StringUtils::hasLength)) {
             errors.rejectValue("cities", "Города создаваемой страны не могут иметь пустое наименование");
         }
 

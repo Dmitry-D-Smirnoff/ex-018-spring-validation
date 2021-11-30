@@ -19,6 +19,6 @@ public class CountryDto {
     private String countryName;
 
     @JsonManagedReference
-    private List<CityDto> cities;
+    private List<PersonDto> cities;
 
 }
