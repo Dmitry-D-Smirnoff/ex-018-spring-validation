@@ -31,7 +31,7 @@ public class Person {
 
     @EqualsAndHashCode.Include
     @ToString.Include
-    @Column(name = "person_name")
+    @Column(name = "person_name", unique = true)
     private String personName;
 
     @ManyToOne

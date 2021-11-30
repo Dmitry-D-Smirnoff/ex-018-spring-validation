@@ -1,12 +1,19 @@
 package com.example.sdd.controller;
 
-import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.CountryDto;
-import com.example.sdd.dto.validation.PersonDtoValidator;
+import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.validation.CountryDtoValidator;
+import com.example.sdd.dto.validation.PersonDtoValidator;
+import com.example.sdd.dto.validation.group.CountryDtoUpdateGroup;
+import com.example.sdd.dto.validation.group.PersonDtoUpdateGroup;
+import com.example.sdd.entity.Country;
+import com.example.sdd.entity.Person;
+import com.example.sdd.entity.validation.CountryValidator;
+import com.example.sdd.entity.validation.PersonValidator;
 import com.example.sdd.mapper.GeoMapper;
-import com.example.sdd.service.PersonService;
 import com.example.sdd.service.CountryService;
+import com.example.sdd.service.PersonService;
+import com.example.sdd.validation.ValidatedOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,16 +43,23 @@ public class GeoController {
     private final PersonService personService;
     private final CountryService countryService;
 
+    private final PersonValidator personValidator;
+    private final CountryValidator countryValidator;
+
     private final GeoMapper geoMapper;
 
     public GeoController(
             PersonService personService,
             CountryService countryService,
-            GeoMapper geoMapper
+            GeoMapper geoMapper,
+            PersonValidator personValidator,
+            CountryValidator countryValidator
     ) {
         this.personService = personService;
         this.countryService = countryService;
         this.geoMapper = geoMapper;
+        this.personValidator = personValidator;
+        this.countryValidator = countryValidator;
     }
 
     @InitBinder("countryDto")
@@ -65,67 +80,75 @@ public class GeoController {
 
     @GetMapping("/countries/{countryId}")
     @ResponseStatus(HttpStatus.OK)
-    public CountryDto getCountryById(@PathVariable("countryId") @Min(2) int id) {
+    public CountryDto getCountryById(@PathVariable("countryId") @Min(1) int id) {
         return geoMapper.convertToDto(countryService.getCountryById(id));
     }
 
     @GetMapping("/countries/byName/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public CountryDto getCountryById(@PathVariable("name") String name) {
-        return geoMapper.convertToDto(countryService.getCountryByName(name));
+    public List<CountryDto> getCountryByName(@PathVariable("name") @NotBlank String name) {
+        return countryService.getCountryByName(name).stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
     @PostMapping("/countries")
     @ResponseStatus(HttpStatus.CREATED)
-    public CountryDto createCountry(@Valid @RequestBody CountryDto countryDto) {
+    public CountryDto createCountry(@RequestBody @Valid CountryDto countryDto) {
+        Country country = geoMapper.convertToEntity(countryDto);
+        countryValidator.validate(country, ValidatedOperation.COUNTRY_CREATE, Country.class);
         return geoMapper.convertToDto(countryService.createCountry(geoMapper.convertToEntity(countryDto)));
     }
 
     @PutMapping("/countries")
     @ResponseStatus(HttpStatus.OK)
-    public CountryDto updateCountry(@RequestBody CountryDto countryDto) {
+    public CountryDto updateCountry(@RequestBody @Validated(CountryDtoUpdateGroup.class) CountryDto countryDto) {
+        Country country = geoMapper.convertToEntity(countryDto);
+        countryValidator.validate(country, ValidatedOperation.COUNTRY_UPDATE, Country.class);
         return geoMapper.convertToDto(countryService.updateCountry(geoMapper.convertToEntity(countryDto)));
     }
 
     @DeleteMapping("/countries/{countryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCountry(@PathVariable("countryId") int id) {
+    public void deleteCountry(@PathVariable("countryId") @Min(2) int id) {
         countryService.deleteCountry(id);
     }
 
-    @GetMapping("/cities")
+    @GetMapping("/persons")
     @ResponseStatus(HttpStatus.OK)
-    public List<PersonDto> getAllCities() {
-        return personService.getAllCities().stream().map(geoMapper::convertToDto).collect(Collectors.toList());
+    public List<PersonDto> getAllPersons() {
+        return personService.getAllPersons().stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
-    @GetMapping("/cities/{personId}")
+    @GetMapping("/persons/{personId}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto getPersonById(@PathVariable("personId") @Min(2) int id) {
+    public PersonDto getPersonById(@PathVariable("personId") @Min(1) int id) {
         return geoMapper.convertToDto(personService.getPersonById(id));
     }
 
-    @GetMapping("/cities/byName/{name}")
+    @GetMapping("/persons/byName/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto getPersonById(@PathVariable("name") String name) {
-        return geoMapper.convertToDto(personService.getPersonByName(name));
+    public List<PersonDto> getPersonByName(@PathVariable("name") @NotBlank String name) {
+        return personService.getPersonByName(name).stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
-    @PostMapping("/cities")
+    @PostMapping("/persons")
     @ResponseStatus(HttpStatus.CREATED)
-    public PersonDto createPerson(@Valid @RequestBody PersonDto personDto) {
+    public PersonDto createPerson(@RequestBody @Valid PersonDto personDto) {
+        Person person = geoMapper.convertToEntity(personDto);
+        personValidator.validate(person, ValidatedOperation.PERSON_CREATE, Person.class);
         return geoMapper.convertToDto(personService.createPerson(geoMapper.convertToEntity(personDto)));
     }
 
-    @PutMapping("/cities")
+    @PutMapping("/persons")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto updatePerson(@RequestBody PersonDto personDto) {
+    public PersonDto updatePerson(@RequestBody @Validated(PersonDtoUpdateGroup.class) PersonDto personDto) {
+        Person person = geoMapper.convertToEntity(personDto);
+        personValidator.validate(person, ValidatedOperation.PERSON_UPDATE, Person.class);
         return geoMapper.convertToDto(personService.updatePerson(geoMapper.convertToEntity(personDto)));
     }
 
-    @DeleteMapping("/cities/{personId}")
+    @DeleteMapping("/persons/{personId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePerson(@PathVariable("personId") int id) {
+    public void deletePerson(@PathVariable("personId") @Min(2) int id) {
         personService.deletePerson(id);
     }
 

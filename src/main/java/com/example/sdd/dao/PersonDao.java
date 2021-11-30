@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface PersonDao {
 
-    List<Person> findAllCities();
+    List<Person> findAllPersons();
 
     Person findById(int id);
 
-    Person findByName(String name);
+    List<Person> findByName(String name);
 
     Person create(Person person);
 

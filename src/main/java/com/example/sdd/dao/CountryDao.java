@@ -10,7 +10,7 @@ public interface CountryDao {
 
     Country findById(int id);
 
-    Country findByName(String name);
+    List<Country> findByName(String name);
 
     Country create(Country country);
 

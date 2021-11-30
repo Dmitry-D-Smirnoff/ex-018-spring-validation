@@ -20,7 +20,7 @@ public class PersonDaoImpl implements PersonDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Person> findAllCities() {
+    public List<Person> findAllPersons() {
         return entityManager.createNamedQuery("Person.findAll", Person.class).getResultList();
     }
 
@@ -28,9 +28,9 @@ public class PersonDaoImpl implements PersonDao {
         return entityManager.find(Person.class, id);
     }
 
-    public Person findByName(String name) {
+    public List<Person> findByName(String name) {
         return entityManager.createNamedQuery("Person.findByName", Person.class)
-                .setParameter("name", name).getSingleResult();
+                .setParameter("name", name).getResultList();
     }
 
     public Person create(Person Person) {

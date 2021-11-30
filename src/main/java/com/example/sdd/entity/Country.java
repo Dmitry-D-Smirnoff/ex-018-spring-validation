@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Getter
@@ -33,10 +35,12 @@ public class Country {
 
     @EqualsAndHashCode.Include
     @ToString.Include
-    @Column(name = "country_name")
+    @Column(name = "country_name", unique = true)
     private String countryName;
 
+    @Valid
+    @NotEmpty
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Person> cities;
+    private List<Person> persons;
 
 }

@@ -1,8 +1,7 @@
-package com.example.sdd;
+package com.example.sdd.validation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.util.Date;
 import java.util.List;
@@ -11,9 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ValidationErrorResponse {
 
-    private final String message;
-    private final List<String> errors;
-    private final HttpStatus status;
+    private final String mainMessage;
     private final Date timestamp;
+    private final List<ErrorDetails> errors;
 
 }

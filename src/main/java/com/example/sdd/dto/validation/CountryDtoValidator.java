@@ -1,7 +1,7 @@
 package com.example.sdd.dto.validation;
 
 import com.example.sdd.dto.CountryDto;
-import com.example.sdd.dto.PersonDto;
+import com.example.sdd.validation.ValidationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -22,16 +22,12 @@ public class CountryDtoValidator implements Validator {
     public void validate(@NotNull Object obj, @NotNull Errors errors) {
         CountryDto countryDto = (CountryDto) obj;
 
-        if (Objects.isNull(countryDto.getCountryName())) {
-            errors.rejectValue("countryName", "Наименование страны должно быть заполнено");
+        if (Objects.isNull(countryDto.getPersons())) {
+            errors.rejectValue("persons", "Перечень граждан должен включать хотя бы одного человека");
         }
 
-        if (Objects.isNull(countryDto.getCities())) {
-            errors.rejectValue("cities", "Перечень городов должен включать хотя бы один город");
-        }
-
-        if (!countryDto.getCities().stream().map(PersonDto::getPersonName).allMatch(StringUtils::hasLength)) {
-            errors.rejectValue("cities", "Города создаваемой страны не могут иметь пустое наименование");
+        if (StringUtils.hasText(countryDto.getCountryName()) && !ValidationUtils.startsWithCapitalRussianLetter(countryDto.getCountryName())) {
+            errors.rejectValue("countryName", "Наименование страны должно быть русскоязычным и начинаться с заглавной буквы");
         }
 
     }
