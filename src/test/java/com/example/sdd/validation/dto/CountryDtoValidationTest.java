@@ -1,8 +1,8 @@
-package com.example.sdd.validation;
+package com.example.sdd.validation.dto;
 
 import com.example.sdd.dto.CountryDto;
-import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.validation.CountryDtoValidator;
+import com.example.sdd.validation.ValidationTestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +16,15 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Collections;
 import java.util.Set;
 
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS;
+import static com.example.sdd.validation.ValidationTestUtils.CORRECT_DTO_MUST_HAVE_NO_JAVA_VALIDATION_ERRORS;
+import static com.example.sdd.validation.ValidationTestUtils.CORRECT_DTO_MUST_HAVE_NO_SPRING_VALIDATION_ERRORS;
+import static com.example.sdd.validation.ValidationTestUtils.ERROR_CORRECT_DTO_HAS_VALIDATION_ERRORS;
+import static com.example.sdd.validation.ValidationTestUtils.ERROR_TEST_DTO_MUST_HAVE_ONE_VALIDATION_ERROR;
+import static com.example.sdd.validation.ValidationTestUtils.ERROR_VALIDATION_ERROR_MESSAGE_DOES_NOT_MATCH;
+import static com.example.sdd.validation.ValidationTestUtils.ERROR_VALIDATION_ERROR_PROPERTY_DOES_NOT_MATCH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,43 +50,44 @@ public class CountryDtoValidationTest {
     }
 
     @Test
-    @DisplayName("Корректная страна не имеет ошибок Spring-валидации")
-    public void javaValidationShouldHaveNoConstraintViolationsOnCorrectCountryDto() {
-        final DataBinder dataBinder = new DataBinder(getCorrectCountryDto());
+    @DisplayName(CORRECT_DTO_MUST_HAVE_NO_SPRING_VALIDATION_ERRORS)
+    public void springValidationShouldHaveNoConstraintViolationsOnCorrectCountryDto() {
+        final DataBinder dataBinder = new DataBinder(ValidationTestUtils.getCorrectCountryDto());
         dataBinder.addValidators(countryDtoValidator);
         dataBinder.validate();
 
         assertFalse(dataBinder.getBindingResult().hasErrors(),
-                "ОШИБКА: Валидация корректной страны прошла НЕуспешно");
+                ERROR_CORRECT_DTO_HAS_VALIDATION_ERRORS);
     }
 
     @Test
-    @DisplayName("Корректная страна не имеет ошибок Java-валидации")
-    public void springValidationShouldHaveNoConstraintViolationsOnCorrectCountryDto() {
-        CountryDto countryDto = getCorrectCountryDto();
+    @DisplayName(CORRECT_DTO_MUST_HAVE_NO_JAVA_VALIDATION_ERRORS)
+    public void javaValidationShouldHaveNoConstraintViolationsOnCorrectCountryDto() {
+        CountryDto countryDto = ValidationTestUtils.getCorrectCountryDto();
 
         Set<ConstraintViolation<CountryDto>> violations = validator.validate(countryDto);
-        assertTrue(violations.isEmpty(), "ОШИБКА: Валидация корректной страны прошла НЕуспешно");
+        assertTrue(violations.isEmpty(), ERROR_CORRECT_DTO_HAS_VALIDATION_ERRORS);
     }
 
     @Test
-    @DisplayName("Наименование страны должно быть от 3 до 10 символов")
+    @DisplayName(VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS)
     public void javaValidationShouldDetectInvalidCountryDtoDate() {
-        CountryDto countryDto = getCorrectCountryDto();
+        CountryDto countryDto = ValidationTestUtils.getCorrectCountryDto();
         countryDto.setCountryName("ЕС");
 
         Set<ConstraintViolation<CountryDto>> violations = validator.validate(countryDto);
-        assertEquals(1, violations.size(), "ОШИБКА: Валидация должна была найти ровно 1 ошибку");
+        assertEquals(1, violations.size(), ERROR_TEST_DTO_MUST_HAVE_ONE_VALIDATION_ERROR);
 
         ConstraintViolation<CountryDto> violation = violations.iterator().next();
-        assertEquals("Наименование страны должно быть от 3 до 10 символов", violation.getMessage(), "ОШИБКА: Неверное сообщение");
-        assertEquals("countryName", violation.getPropertyPath().toString(), "ОШИБКА: Неверное свойство");
+        assertEquals(VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS, 
+                violation.getMessage(), ERROR_VALIDATION_ERROR_MESSAGE_DOES_NOT_MATCH);
+        assertEquals("countryName", violation.getPropertyPath().toString(), ERROR_VALIDATION_ERROR_PROPERTY_DOES_NOT_MATCH);
     }
 
     @Test
     @DisplayName("Наименование страны должно быть русскоязычным и начинаться с заглавной буквы")
     public void springValidationShouldDetectCountryHasCountryNameInvalid() {
-        final CountryDto countryDto = getCorrectCountryDto();
+        final CountryDto countryDto = ValidationTestUtils.getCorrectCountryDto();
         countryDto.setCountryName("австрия");
 
         final DataBinder dataBinder = new DataBinder(countryDto);
@@ -88,7 +95,7 @@ public class CountryDtoValidationTest {
         dataBinder.validate();
 
         assertTrue(dataBinder.getBindingResult().hasErrors(),
-                "ОШИБКА: Валидация без указания страны прошла успешно");
+                ERROR_TEST_DTO_MUST_HAVE_ONE_VALIDATION_ERROR);
 
         assertTrue(dataBinder
                         .getBindingResult()
@@ -96,23 +103,8 @@ public class CountryDtoValidationTest {
                         .stream()
                         .map(ObjectError::getCode)
                         .anyMatch("Наименование страны должно быть русскоязычным и начинаться с заглавной буквы"::equals),
-                "ОШИБКА: Неверное сообщение"
+                ERROR_VALIDATION_ERROR_MESSAGE_DOES_NOT_MATCH
         );
-    }
-
-    private CountryDto getCorrectCountryDto(){
-        CountryDto countryDto = new CountryDto();
-        countryDto.setCountryName("Россия");
-
-        countryDto.setPersons(Collections.singletonList(getCorrectPersonDto()));
-        return countryDto;
-    }
-
-    private PersonDto getCorrectPersonDto(){
-        PersonDto personDto = new PersonDto();
-        personDto.setPersonName("Иванов");
-
-        return personDto;
     }
 
 }

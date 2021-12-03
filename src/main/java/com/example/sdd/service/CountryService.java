@@ -2,12 +2,9 @@ package com.example.sdd.service;
 
 import com.example.sdd.entity.Country;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Validated
 @Service
 public interface CountryService {
 
@@ -17,9 +14,9 @@ public interface CountryService {
 
     List<Country> getCountryByName(String name);
 
-    Country createCountry(@Valid Country country);
+    Country createCountry(Country country);
 
-    Country updateCountry(@Valid Country country);
+    Country updateCountry(Country country);
 
     void deleteCountry(int id);
 

@@ -1,26 +1,37 @@
 package com.example.sdd.dto;
 
+import com.example.sdd.dto.validation.group.CountryDtoCreateGroup;
 import com.example.sdd.dto.validation.group.CountryDtoUpdateGroup;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.util.List;
+
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_CREATE_MUST_HAVE_NULL_ID;
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_MUST_CONTAIN_AT_LEAST_ONE_PERSON_DTO;
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_MUST_HAVE_COUNTRY_NAME;
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS;
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_UPDATE_MUST_HAVE_ID;
 
 @NotNull
 @Getter
 @Setter
 public class CountryDto {
-    @NotNull(groups = {CountryDtoUpdateGroup.class}, message = "Id обновляемой страны должен быть указан")
+    @Null(groups = {CountryDtoCreateGroup.class}, message = VALID_COUNTRY_DTO_CREATE_MUST_HAVE_NULL_ID)
+    @NotNull(groups = {CountryDtoUpdateGroup.class}, message = VALID_COUNTRY_DTO_UPDATE_MUST_HAVE_ID)
     private Integer id;
 
-    @NotNull(message = "Наименование страны не может быть пустым")
-    @Size(min=3, max=10, message = "Наименование страны должно быть от 3 до 10 символов")
+    @NotNull(groups = {CountryDtoCreateGroup.class, CountryDtoUpdateGroup.class}, message = VALID_COUNTRY_DTO_MUST_HAVE_COUNTRY_NAME)
+    @Size(min=3, max=10, groups = {CountryDtoCreateGroup.class, CountryDtoUpdateGroup.class}, message = VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS)
     private String countryName;
 
+    @NotEmpty(groups = {CountryDtoCreateGroup.class, CountryDtoUpdateGroup.class}, message = VALID_COUNTRY_DTO_MUST_CONTAIN_AT_LEAST_ONE_PERSON_DTO)
     @Valid
     @JsonManagedReference
     private List<PersonDto> persons;

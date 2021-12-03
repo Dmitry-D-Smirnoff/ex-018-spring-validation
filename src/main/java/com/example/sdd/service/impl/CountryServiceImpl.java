@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-import static com.example.sdd.validation.ValidationUtils.allNotEmpty;
+import static com.example.sdd.validation.ExampleValidationUtils.allNotEmpty;
 
 @Service
 public class CountryServiceImpl implements CountryService {

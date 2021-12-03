@@ -5,6 +5,8 @@ import org.springframework.validation.FieldError;
 
 import javax.validation.ConstraintViolation;
 
+import static com.example.sdd.validation.ErrorCode.ERROR_CODE_SPRING_VALIDATION_FIELD_ERROR;
+
 @Getter
 public class ErrorDetails {
     private final String message;
@@ -13,7 +15,7 @@ public class ErrorDetails {
 
     public ErrorDetails(ConstraintViolation<?> violation){
         this(
-                ErrorCode.VALIDATION_CONSTRAINT_VIOLATION_EXCEPTION,
+                ErrorCode.ERROR_CODE_CONSTRAINT_VIOLATION_EXCEPTION,
                 violation.getMessage(),
                 violation.getPropertyPath().toString()
         );
@@ -21,7 +23,7 @@ public class ErrorDetails {
 
     public ErrorDetails(FieldError error){
         this(
-                ErrorCode.VALIDATION_DTO_SPRING_FIELD_ERROR,
+                ERROR_CODE_SPRING_VALIDATION_FIELD_ERROR,
                 error.getCode(),
                 error.getField()
         );

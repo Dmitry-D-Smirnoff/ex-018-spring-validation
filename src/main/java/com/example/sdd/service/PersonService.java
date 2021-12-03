@@ -2,12 +2,9 @@ package com.example.sdd.service;
 
 import com.example.sdd.entity.Person;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Validated
 @Service
 public interface PersonService {
 
@@ -17,9 +14,9 @@ public interface PersonService {
 
     List<Person> getPersonByName(String name);
 
-    Person createPerson(@Valid Person person);
+    Person createPerson(Person person);
 
-    Person updatePerson(@Valid Person person);
+    Person updatePerson(Person person);
 
     void deletePerson(int id);
 

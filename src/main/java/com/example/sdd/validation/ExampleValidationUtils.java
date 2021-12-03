@@ -5,7 +5,7 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-public class ValidationUtils {
+public class ExampleValidationUtils {
 
     private static final Pattern SHOULD_CONTAIN_ONLY_RUSSIAN_LETTERS_AND_SPACES_PATTERN = Pattern.compile("[а-яёА-ЯЁ\\s]+");
     private static final Pattern SHOULD_START_WITH_CAPITAL_RUSSIAN_LETTER = Pattern.compile("^[А-Я][а-яёА-ЯЁ\\s]+");

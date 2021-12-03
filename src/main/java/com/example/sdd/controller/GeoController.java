@@ -4,7 +4,9 @@ import com.example.sdd.dto.CountryDto;
 import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.validation.CountryDtoValidator;
 import com.example.sdd.dto.validation.PersonDtoValidator;
+import com.example.sdd.dto.validation.group.CountryDtoCreateGroup;
 import com.example.sdd.dto.validation.group.CountryDtoUpdateGroup;
+import com.example.sdd.dto.validation.group.PersonDtoCreateGroup;
 import com.example.sdd.dto.validation.group.PersonDtoUpdateGroup;
 import com.example.sdd.entity.Country;
 import com.example.sdd.entity.Person;
@@ -13,7 +15,7 @@ import com.example.sdd.entity.validation.PersonValidator;
 import com.example.sdd.mapper.GeoMapper;
 import com.example.sdd.service.CountryService;
 import com.example.sdd.service.PersonService;
-import com.example.sdd.validation.ValidatedOperation;
+import com.example.sdd.validation.ValidatedAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -90,20 +92,22 @@ public class GeoController {
         return countryService.getCountryByName(name).stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
+    @Validated(CountryDtoCreateGroup.class)
     @PostMapping("/countries")
     @ResponseStatus(HttpStatus.CREATED)
     public CountryDto createCountry(@RequestBody @Valid CountryDto countryDto) {
         Country country = geoMapper.convertToEntity(countryDto);
-        countryValidator.validate(country, ValidatedOperation.COUNTRY_CREATE, Country.class);
-        return geoMapper.convertToDto(countryService.createCountry(geoMapper.convertToEntity(countryDto)));
+        countryValidator.validate(country, ValidatedAction.ACTION_COUNTRY_CREATE, Country.class);
+        return geoMapper.convertToDto(countryService.createCountry(country));
     }
 
+    @Validated(CountryDtoUpdateGroup.class)
     @PutMapping("/countries")
     @ResponseStatus(HttpStatus.OK)
-    public CountryDto updateCountry(@RequestBody @Validated(CountryDtoUpdateGroup.class) CountryDto countryDto) {
+    public CountryDto updateCountry(@RequestBody @Valid CountryDto countryDto) {
         Country country = geoMapper.convertToEntity(countryDto);
-        countryValidator.validate(country, ValidatedOperation.COUNTRY_UPDATE, Country.class);
-        return geoMapper.convertToDto(countryService.updateCountry(geoMapper.convertToEntity(countryDto)));
+        countryValidator.validate(country, ValidatedAction.ACTION_COUNTRY_UPDATE, Country.class);
+        return geoMapper.convertToDto(countryService.updateCountry(country));
     }
 
     @DeleteMapping("/countries/{countryId}")
@@ -130,20 +134,22 @@ public class GeoController {
         return personService.getPersonByName(name).stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
+    @Validated(PersonDtoCreateGroup.class)
     @PostMapping("/persons")
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(@RequestBody @Valid PersonDto personDto) {
         Person person = geoMapper.convertToEntity(personDto);
-        personValidator.validate(person, ValidatedOperation.PERSON_CREATE, Person.class);
-        return geoMapper.convertToDto(personService.createPerson(geoMapper.convertToEntity(personDto)));
+        personValidator.validate(person, ValidatedAction.ACTION_PERSON_CREATE, Person.class);
+        return geoMapper.convertToDto(personService.createPerson(person));
     }
 
+    @Validated(PersonDtoUpdateGroup.class)
     @PutMapping("/persons")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto updatePerson(@RequestBody @Validated(PersonDtoUpdateGroup.class) PersonDto personDto) {
+    public PersonDto updatePerson(@RequestBody @Valid PersonDto personDto) {
         Person person = geoMapper.convertToEntity(personDto);
-        personValidator.validate(person, ValidatedOperation.PERSON_UPDATE, Person.class);
-        return geoMapper.convertToDto(personService.updatePerson(geoMapper.convertToEntity(personDto)));
+        personValidator.validate(person, ValidatedAction.ACTION_PERSON_UPDATE, Person.class);
+        return geoMapper.convertToDto(personService.updatePerson(person));
     }
 
     @DeleteMapping("/persons/{personId}")

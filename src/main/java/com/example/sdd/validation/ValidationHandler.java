@@ -13,20 +13,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.sdd.validation.ErrorCode.ERROR_CODE_ENTITY_NOT_FOUND;
+import static com.example.sdd.validation.ErrorCode.ERROR_CODE_UNRECOGNIZED_ACTION;
 
 @RestControllerAdvice
 public class ValidationHandler extends ResponseEntityExceptionHandler {
 
     @NotNull
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid( // error handle for @Valid
-            MethodArgumentNotValidException ex,
-            @NotNull HttpHeaders headers,
-            HttpStatus status, @NotNull WebRequest request
+    protected ResponseEntity<Object> handleMethodArgumentNotValid( // error handler for all @Valid
+                                                                   MethodArgumentNotValidException ex,
+                                                                   @NotNull HttpHeaders headers,
+                                                                   HttpStatus status, @NotNull WebRequest request
     ) {
         List<ErrorDetails> errorDetailsList = ex.getBindingResult()
                 .getFieldErrors()
@@ -34,8 +37,9 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
                 .map(ErrorDetails::new)
                 .collect(Collectors.toList());
 
-        return new ResponseEntity<>(getErrorResponse(
+        return new ResponseEntity<>(new ValidationErrorResponse(
                 "MethodArgumentNotValidException",
+                LocalDateTime.now(),
                 errorDetailsList
         ), headers, HttpStatus.BAD_REQUEST);
     }
@@ -49,8 +53,9 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
                 .map(ErrorDetails::new)
                 .collect(Collectors.toList());
 
-        return getErrorResponse(
+        return new ValidationErrorResponse(
                 "ConstraintViolationException",
+                LocalDateTime.now(),
                 errorDetailsList
         );
     }
@@ -59,8 +64,9 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ValidationErrorResponse handleValidationException(ValidationException e) {
 
-        return getErrorResponse(
+        return new ValidationErrorResponse(
                 e.getMainMessage(),
+                LocalDateTime.now(),
                 e.getErrors()
         );
     }
@@ -69,20 +75,23 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     public ValidationErrorResponse handleEntityNotFoundException(EntityNotFoundException e) {
 
-        return getErrorResponse(
-                "ОШИБКА: Объект не найден",
-                Collections.singletonList(new ErrorDetails(ErrorCode.NOT_FOUND_ENTITY, e.getMessage()))
+        return new ValidationErrorResponse(
+                "EntityNotFoundException",
+                LocalDateTime.now(),
+                Collections.singletonList(new ErrorDetails(ERROR_CODE_ENTITY_NOT_FOUND, e.getMessage()))
         );
     }
 
-    private ValidationErrorResponse getErrorResponse(
-            String mainMessage,
-            List<ErrorDetails> errorMessages
-    ){
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    @ExceptionHandler(ValidatedActionException.class)
+    public ValidationErrorResponse handleValidatedActionException(ValidatedActionException e) {
+
         return new ValidationErrorResponse(
-                mainMessage,
-                new Date(),
-                errorMessages
+                "ValidatedActionException",
+                LocalDateTime.now(),
+                Collections.singletonList(new ErrorDetails(ERROR_CODE_UNRECOGNIZED_ACTION, e.getMessage()))
         );
     }
+
+
 }

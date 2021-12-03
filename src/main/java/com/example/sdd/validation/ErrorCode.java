@@ -6,12 +6,13 @@ import lombok.ToString;
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
 public enum ErrorCode {
-    NOT_FOUND_ENTITY("Запрошенный объект не найден в базе данных"),
+    ERROR_CODE_UNRECOGNIZED_ACTION("Указано недопустимое действие над объектом"),
 
-    VALIDATION_CONSTRAINT_VIOLATION_EXCEPTION("ConstraintViolationException"),
-    VALIDATION_DTO_SPRING_FIELD_ERROR("JavaEEFieldError"),
-    VALIDATION_001_PERSON_NAME_DUPLICATION("Нарушение уникальности имени Гражданина"),
-    VALIDATION_002_COUNTRY_NAME_DUPLICATION("Нарушение уникальности имени Страны");
+    ERROR_CODE_ENTITY_NOT_FOUND("Запрошенный объект не найден в базе данных"),
+    ERROR_CODE_CONSTRAINT_VIOLATION_EXCEPTION("ConstraintViolationException"),
+    ERROR_CODE_SPRING_VALIDATION_FIELD_ERROR("SpringValidationFieldError"),
+    ERROR_CODE_PERSON_NAME_DUPLICATION("Нарушение уникальности имени Гражданина"),
+    ERROR_CODE_COUNTRY_NAME_DUPLICATION("Нарушение уникальности имени Страны");
 
     private final String message;
 

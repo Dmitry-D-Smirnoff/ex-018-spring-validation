@@ -1,14 +1,15 @@
 package com.example.sdd.dto.validation;
 
 import com.example.sdd.dto.PersonDto;
-import com.example.sdd.validation.ValidationUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
+
+import static com.example.sdd.validation.ValidationErrorMessages.VALID_PERSON_DTO_NAME_MUST_BE_IN_RUSSIAN_WITH_FIRST_CAPITAL_LETTER;
+import static com.example.sdd.validation.ExampleValidationUtils.containsOnlyRussianLettersAndSpaces;
 
 @Service
 public class PersonDtoValidator implements Validator {
@@ -22,12 +23,8 @@ public class PersonDtoValidator implements Validator {
     public void validate(@NotNull Object obj, @NotNull Errors errors) {
         PersonDto personDto = (PersonDto) obj;
 
-        if (Objects.isNull(personDto.getCountry())) {
-            errors.rejectValue("country", "Для гражданина должна быть указана страна");
-        }
-
-        if (StringUtils.hasText(personDto.getPersonName()) && !ValidationUtils.containsOnlyRussianLettersAndSpaces(personDto.getPersonName())) {
-            errors.rejectValue("personName", "Недопустимые символы в имени Гражданина");
+        if (StringUtils.hasText(personDto.getPersonName()) && !containsOnlyRussianLettersAndSpaces(personDto.getPersonName())) {
+            errors.rejectValue("personName", VALID_PERSON_DTO_NAME_MUST_BE_IN_RUSSIAN_WITH_FIRST_CAPITAL_LETTER);
         }
 
     }
