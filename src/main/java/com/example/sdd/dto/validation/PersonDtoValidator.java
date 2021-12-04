@@ -11,7 +11,7 @@ import org.springframework.validation.SmartValidator;
 
 import javax.validation.constraints.NotNull;
 
-import static com.example.sdd.validation.ExampleValidationUtils.startsWithCapitalRussianLetter;
+import static com.example.sdd.validation.CustomValidationUtils.startsWithCapitalRussianLetter;
 import static com.example.sdd.validation.ValidationErrorMessages.VALID_PERSON_DTO_NAME_MUST_BE_IN_RUSSIAN_WITH_FIRST_CAPITAL_LETTER;
 
 @Service

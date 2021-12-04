@@ -12,7 +12,7 @@ import org.springframework.validation.ValidationUtils;
 
 import javax.validation.constraints.NotNull;
 
-import static com.example.sdd.validation.ExampleValidationUtils.startsWithCapitalRussianLetter;
+import static com.example.sdd.validation.CustomValidationUtils.startsWithCapitalRussianLetter;
 import static com.example.sdd.validation.ValidationErrorMessages.VALID_COUNTRY_DTO_NAME_MUST_BE_IN_RUSSIAN_WITH_FIRST_CAPITAL_LETTER;
 
 @Service
@@ -38,8 +38,8 @@ public class CountryDtoValidator implements SmartValidator {
     public void validate(@NotNull Object target, @NotNull Errors errors, Object... hints) {
         CountryDto countryDto = (CountryDto) target;
 
-        if(!CollectionUtils.isEmpty(countryDto.getPersons()))
-            for(PersonDto personDto : countryDto.getPersons()){
+        if (!CollectionUtils.isEmpty(countryDto.getPersons()))
+            for (PersonDto personDto : countryDto.getPersons()) {
                 ValidationUtils.invokeValidator(personDtoValidator, personDto, errors, hints);
             }
 

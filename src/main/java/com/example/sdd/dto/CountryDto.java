@@ -28,7 +28,7 @@ public class CountryDto {
     private Integer id;
 
     @NotNull(groups = {CountryCreate.class, CountryUpdate.class}, message = VALID_COUNTRY_DTO_MUST_HAVE_COUNTRY_NAME)
-    @Size(min=3, max=10, groups = {CountryCreate.class, CountryUpdate.class}, message = VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS)
+    @Size(min = 3, max = 10, groups = {CountryCreate.class, CountryUpdate.class}, message = VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS)
     private String countryName;
 
     @NotEmpty(groups = {CountryCreate.class, CountryUpdate.class}, message = VALID_COUNTRY_DTO_MUST_CONTAIN_AT_LEAST_ONE_PERSON_DTO)

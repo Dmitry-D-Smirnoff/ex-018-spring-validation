@@ -1,7 +1,8 @@
-package com.example.sdd.entity.validation;
+package com.example.sdd.entity.validation.impl;
 
 import com.example.sdd.dto.validation.group.PersonCreate;
 import com.example.sdd.entity.PersonEntity;
+import com.example.sdd.entity.validation.EntityValidator;
 import com.example.sdd.service.PersonService;
 import com.example.sdd.validation.ErrorDetails;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.example.sdd.validation.ErrorCode.ERROR_CODE_PERSON_NAME_DUPLICATION;
 import static com.example.sdd.validation.ValidationErrorMessages.VALID_PERSON_MUST_HAVE_UNIQUE_PERSON_NAME;
 
 @Service
@@ -27,18 +27,14 @@ public class PersonEntityValidator implements EntityValidator<PersonEntity> {
     }
 
     @Override
-    public List<ErrorDetails> collectValidationErrors(PersonEntity target, Class<?> hint, Class<PersonEntity> targetType) {
+    public List<ErrorDetails> collectValidationErrors(PersonEntity target, Class<?> hint) {
         List<ErrorDetails> errors = validatorFactory.getValidator().validate(target)
                 .stream().map(ErrorDetails::new).collect(Collectors.toList());
 
         List<PersonEntity> duplicates = personService.getPersonByName(target.getPersonName());
         if (!CollectionUtils.isEmpty(duplicates) && (PersonCreate.class.equals(hint)
                 || duplicates.size() > 1 || !Objects.equals(duplicates.get(0).getId(), target.getId()))) {
-            errors.add(new ErrorDetails(
-                    ERROR_CODE_PERSON_NAME_DUPLICATION,
-                    VALID_PERSON_MUST_HAVE_UNIQUE_PERSON_NAME,
-                    "personName"
-            ));
+            errors.add(new ErrorDetails(VALID_PERSON_MUST_HAVE_UNIQUE_PERSON_NAME, "personName"));
         }
 
         return errors;

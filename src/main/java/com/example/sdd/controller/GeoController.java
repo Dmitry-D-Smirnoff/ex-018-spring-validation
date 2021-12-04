@@ -10,8 +10,8 @@ import com.example.sdd.dto.validation.group.PersonCreate;
 import com.example.sdd.dto.validation.group.PersonUpdate;
 import com.example.sdd.entity.CountryEntity;
 import com.example.sdd.entity.PersonEntity;
-import com.example.sdd.entity.validation.CountryEntityValidator;
-import com.example.sdd.entity.validation.PersonEntityValidator;
+import com.example.sdd.entity.validation.impl.CountryEntityValidator;
+import com.example.sdd.entity.validation.impl.PersonEntityValidator;
 import com.example.sdd.mapper.GeoMapper;
 import com.example.sdd.service.CountryService;
 import com.example.sdd.service.PersonService;
@@ -112,7 +112,7 @@ public class GeoController {
             @RequestBody @Validated(CountryCreate.class) @Valid CountryDto countryDto
     ) {
         CountryEntity countryEntity = geoMapper.convertToEntity(countryDto);
-        countryEntityValidator.validate(countryEntity, CountryCreate.class, CountryEntity.class);
+        countryEntityValidator.validate(countryEntity, CountryCreate.class);
         return geoMapper.convertToDto(countryService.createCountry(countryEntity));
     }
 /*
@@ -156,7 +156,7 @@ org.springframework.web.method.annotation.ModelAttributeMethodProcessor.
     @ResponseStatus(HttpStatus.OK)
     public CountryDto updateCountry(@RequestBody @Validated(CountryUpdate.class) @Valid CountryDto countryDto) {
         CountryEntity countryEntity = geoMapper.convertToEntity(countryDto);
-        countryEntityValidator.validate(countryEntity, CountryUpdate.class, CountryEntity.class);
+        countryEntityValidator.validate(countryEntity, CountryUpdate.class);
         return geoMapper.convertToDto(countryService.updateCountry(countryEntity));
     }
 
@@ -189,7 +189,7 @@ org.springframework.web.method.annotation.ModelAttributeMethodProcessor.
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(@RequestBody @Validated(PersonCreate.class) @Valid PersonDto personDto) {
         PersonEntity personEntity = geoMapper.convertToEntity(personDto);
-        personEntityValidator.validate(personEntity, PersonCreate.class, PersonEntity.class);
+        personEntityValidator.validate(personEntity, PersonCreate.class);
         return geoMapper.convertToDto(personService.createPerson(personEntity));
     }
 
@@ -198,7 +198,7 @@ org.springframework.web.method.annotation.ModelAttributeMethodProcessor.
     @ResponseStatus(HttpStatus.OK)
     public PersonDto updatePerson(@RequestBody @Validated(PersonUpdate.class) @Valid PersonDto personDto) {
         PersonEntity personEntity = geoMapper.convertToEntity(personDto);
-        personEntityValidator.validate(personEntity, PersonUpdate.class, PersonEntity.class);
+        personEntityValidator.validate(personEntity, PersonUpdate.class);
         return geoMapper.convertToDto(personService.updatePerson(personEntity));
     }
 

@@ -79,7 +79,7 @@ public class CountryEntityDtoValidationTest {
         assertEquals(1, violations.size(), ERROR_TEST_DTO_MUST_HAVE_ONE_VALIDATION_ERROR);
 
         ConstraintViolation<CountryDto> violation = violations.iterator().next();
-        assertEquals(VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS, 
+        assertEquals(VALID_COUNTRY_DTO_NAME_MUST_BE_FROM_3_TO_10_CHARS,
                 violation.getMessage(), ERROR_VALIDATION_ERROR_MESSAGE_DOES_NOT_MATCH);
         assertEquals("countryName", violation.getPropertyPath().toString(), ERROR_VALIDATION_ERROR_PROPERTY_DOES_NOT_MATCH);
     }

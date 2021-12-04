@@ -15,7 +15,7 @@ public class ExampleApplication {
         listBeans(SpringApplication.run(ExampleApplication.class, args));
     }
 
-    private static void listBeans(ConfigurableApplicationContext applicationContext){
+    private static void listBeans(ConfigurableApplicationContext applicationContext) {
 
         String[] beanNames = applicationContext.getBeanDefinitionNames();
         Arrays.sort(beanNames);

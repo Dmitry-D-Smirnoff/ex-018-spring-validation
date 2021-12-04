@@ -1,0 +1,600 @@
+{
+	"info": {
+		"_postman_id": "1ae654b7-8893-4ba1-90a0-ebd3384e26f3",
+		"name": "ex-018-spring-validation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Person",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"personName\": \"Василий\",\r\n   \"country\":{\r\n       \"id\": 2\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Country with bad format countryName",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": 1111,\r\n   \"countryName\": \"австрия\",\r\n   \"persons\":[\r\n       {\r\n           \"personName\":\"фрейд\"\r\n        },\r\n        {\r\n           \"personName\":\"юнг\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Country with null countryName",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"countryName\": null,\r\n   \"persons\":[{\"pesonName\":\"\"}]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Country with short countryName",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"countryName\": \"ЕС\",\r\n   \"persons\":[{\"personName\":\"Jenny\"}]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Person with bad format personName",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"personName\": \"Moscow\",\r\n   \"country\":{\r\n       \"id\": 1\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Person with null personName",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"personName\": \"Вася\",\r\n   \"country\":{\r\n       \"id\": 2\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Person with short personName",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"personName\": \"Я\",\r\n   \"country\":{\r\n       \"id\": 41\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Country with not null Id",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": 1111,\r\n   \"countryName\": \"Австрия\",\r\n   \"persons\":[\r\n       {\r\n           \"personName\":\"Фрейд\"\r\n        },\r\n        {\r\n           \"personName\":\"Юнг\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Person with not null id",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": 1231231,\r\n   \"personName\": \"Василий\",\r\n   \"country\":{\r\n       \"id\": 2\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Country with null id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{example018-jsession-id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": null,\r\n   \"countryName\": \"Молдова\",\r\n    \"persons\":[\r\n        {\r\n                \"id\": 1,\r\n                \"personName\": \"Петров\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Person with null id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"id\": null,\r\n   \"personName\": \"Сидоров\",\r\n   \"country\":{\r\n       \"id\": 2\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Country",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{example018-jsession-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/40",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"40"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Person",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/1",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Countries",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{example018-jsession-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Persons",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{example018-jsession-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Country by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "{{example018-jsession-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/111",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Countries by countryName",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/countries/byName/ЦАР",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"countries",
+						"byName",
+						"ЦАР"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Person by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/6",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Persons by personName",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{example018-jsession-id}}"
+					}
+				],
+				"url": {
+					"raw": "http://{{example018-host}}/api/persons/byName/Moscow - Updated",
+					"protocol": "http",
+					"host": [
+						"{{example018-host}}"
+					],
+					"path": [
+						"api",
+						"persons",
+						"byName",
+						"Moscow - Updated"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

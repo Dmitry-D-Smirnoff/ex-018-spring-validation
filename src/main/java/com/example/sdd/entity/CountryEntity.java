@@ -24,8 +24,8 @@ import java.util.List;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@NamedQuery(name="CountryEntity.findAll", query="Select c from CountryEntity c order by c.id asc")
-@NamedQuery(name="CountryEntity.findByName", query="Select c from CountryEntity c where c.countryName = :name")
+@NamedQuery(name = "CountryEntity.findAll", query = "Select c from CountryEntity c order by c.id asc")
+@NamedQuery(name = "CountryEntity.findByName", query = "Select c from CountryEntity c where c.countryName = :name")
 @Table(name = "t_country")
 public class CountryEntity {
 

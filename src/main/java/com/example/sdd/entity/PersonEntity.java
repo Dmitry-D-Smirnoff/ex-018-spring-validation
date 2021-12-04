@@ -20,8 +20,8 @@ import javax.persistence.Table;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@NamedQuery(name="PersonEntity.findAll", query="Select c from PersonEntity c order by c.id asc")
-@NamedQuery(name="PersonEntity.findByName", query="Select c from PersonEntity c where c.personName = :name")
+@NamedQuery(name = "PersonEntity.findAll", query = "Select c from PersonEntity c order by c.id asc")
+@NamedQuery(name = "PersonEntity.findByName", query = "Select c from PersonEntity c where c.personName = :name")
 @Table(name = "t_person")
 public class PersonEntity {
 

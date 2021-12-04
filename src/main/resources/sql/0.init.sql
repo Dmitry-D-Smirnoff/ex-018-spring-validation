@@ -39,6 +39,8 @@ INSERT INTO EXAMPLE018.t_person(person_name, country_id) VALUES ('Marseille', 3)
 
  */
 
-SELECT * FROM all_constraints WHERE owner = 'EXAMPLE018';
+SELECT *
+FROM all_constraints
+WHERE owner = 'EXAMPLE018';
 
 

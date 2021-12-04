@@ -18,18 +18,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.sdd.validation.ErrorCode.ERROR_CODE_ENTITY_NOT_FOUND;
-import static com.example.sdd.validation.ErrorCode.ERROR_CODE_UNRECOGNIZED_ACTION;
-
 @RestControllerAdvice
 public class ValidationHandler extends ResponseEntityExceptionHandler {
 
     @NotNull
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid( // error handler for all @Valid
-                                                                   MethodArgumentNotValidException ex,
-                                                                   @NotNull HttpHeaders headers,
-                                                                   HttpStatus status, @NotNull WebRequest request
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            @NotNull HttpHeaders headers,
+            HttpStatus status, @NotNull WebRequest request
     ) {
         List<ErrorDetails> errorDetailsList = ex.getBindingResult()
                 .getFieldErrors()
@@ -66,7 +63,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
 
         return new ValidationErrorResponse(
                 e.getMainMessage(),
-                LocalDateTime.now(),
+                e.getLocalDateTime(),
                 e.getErrors()
         );
     }
@@ -78,20 +75,8 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
         return new ValidationErrorResponse(
                 "EntityNotFoundException",
                 LocalDateTime.now(),
-                Collections.singletonList(new ErrorDetails(ERROR_CODE_ENTITY_NOT_FOUND, e.getMessage()))
+                Collections.singletonList(new ErrorDetails(e.getMessage(), "FIELD_UNDEFINED"))
         );
     }
-
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    @ExceptionHandler(ValidatedActionException.class)
-    public ValidationErrorResponse handleValidatedActionException(ValidatedActionException e) {
-
-        return new ValidationErrorResponse(
-                "ValidatedActionException",
-                LocalDateTime.now(),
-                Collections.singletonList(new ErrorDetails(ERROR_CODE_UNRECOGNIZED_ACTION, e.getMessage()))
-        );
-    }
-
 
 }

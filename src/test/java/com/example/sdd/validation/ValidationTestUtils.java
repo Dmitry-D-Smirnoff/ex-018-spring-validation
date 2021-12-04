@@ -15,7 +15,7 @@ public final class ValidationTestUtils {
     public static final String ERROR_VALIDATION_ERROR_MESSAGE_DOES_NOT_MATCH = "ОШИБКА: Неверное сообщение об ошибке валидации";
     public static final String ERROR_VALIDATION_ERROR_PROPERTY_DOES_NOT_MATCH = "ОШИБКА: Неверное свойство";
 
-    public static CountryDto getCorrectCountryDto(){
+    public static CountryDto getCorrectCountryDto() {
         CountryDto countryDto = new CountryDto();
         countryDto.setId(1);
         countryDto.setCountryName("Россия");
@@ -24,7 +24,7 @@ public final class ValidationTestUtils {
         return countryDto;
     }
 
-    public static PersonDto getCorrectPersonDto(){
+    public static PersonDto getCorrectPersonDto() {
         PersonDto personDto = new PersonDto();
         personDto.setId(1);
         personDto.setPersonName("Иванов");

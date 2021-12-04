@@ -25,7 +25,7 @@ public class PersonDto {
     private Integer id;
 
     @NotNull(groups = {PersonCreate.class, PersonUpdate.class}, message = VALID_PERSON_DTO_MUST_HAVE_PERSON_NAME)
-    @Size(min=2, max=8, groups = {PersonCreate.class, PersonUpdate.class}, message = VALID_PERSON_DTO_NAME_MUST_BE_FROM_2_TO_8_CHARS)
+    @Size(min = 2, max = 8, groups = {PersonCreate.class, PersonUpdate.class}, message = VALID_PERSON_DTO_NAME_MUST_BE_FROM_2_TO_8_CHARS)
     private String personName;
 
     @NotNull(groups = {PersonCreate.class, PersonUpdate.class}, message = VALID_PERSON_DTO_MUST_HAVE_COUNTRY_ID)

@@ -7,15 +7,15 @@ import org.springframework.util.CollectionUtils;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-interface EntityValidator<T> {
+public interface EntityValidator<T> {
 
-    List<ErrorDetails> collectValidationErrors(@NotNull T target, Class<?> operation, Class<T> targetType);
+    List<ErrorDetails> collectValidationErrors(@NotNull T target, Class<?> operation);
 
-    default void validate(@NotNull T target, Class<?> hint, Class<T> targetType) {
-        List<ErrorDetails> errors = collectValidationErrors(target, hint, targetType);
+    default void validate(@NotNull T target, Class<?> hint) {
+        List<ErrorDetails> errors = collectValidationErrors(target, hint);
 
         if (!CollectionUtils.isEmpty(errors)) {
-            throw new ValidationException("Ошибки валидации объекта " + targetType.getName(), errors);
+            throw new ValidationException("Ошибки валидации объекта " + target.getClass().getName(), errors);
         }
     }
 }
