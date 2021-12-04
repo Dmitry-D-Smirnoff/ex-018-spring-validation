@@ -20,10 +20,10 @@ import javax.persistence.Table;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@NamedQuery(name="Person.findAll", query="Select c from Person c order by c.id asc")
-@NamedQuery(name="Person.findByName", query="Select c from Person c where c.personName = :name")
+@NamedQuery(name="PersonEntity.findAll", query="Select c from PersonEntity c order by c.id asc")
+@NamedQuery(name="PersonEntity.findByName", query="Select c from PersonEntity c where c.personName = :name")
 @Table(name = "t_person")
-public class Person {
+public class PersonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +36,5 @@ public class Person {
 
     @ManyToOne
     @JoinColumn(name = "country_id")
-    private Country country;
+    private CountryEntity countryEntity;
 }

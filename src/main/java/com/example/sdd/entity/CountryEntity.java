@@ -24,10 +24,10 @@ import java.util.List;
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@NamedQuery(name="Country.findAll", query="Select c from Country c order by c.id asc")
-@NamedQuery(name="Country.findByName", query="Select c from Country c where c.countryName = :name")
+@NamedQuery(name="CountryEntity.findAll", query="Select c from CountryEntity c order by c.id asc")
+@NamedQuery(name="CountryEntity.findByName", query="Select c from CountryEntity c where c.countryName = :name")
 @Table(name = "t_country")
-public class Country {
+public class CountryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class Country {
 
     @Valid
     @NotEmpty
-    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Person> persons;
+    @OneToMany(mappedBy = "countryEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PersonEntity> persons;
 
 }

@@ -1,7 +1,7 @@
 package com.example.sdd.service.impl;
 
 import com.example.sdd.dao.CountryDao;
-import com.example.sdd.entity.Country;
+import com.example.sdd.entity.CountryEntity;
 import com.example.sdd.service.CountryService;
 import org.springframework.stereotype.Service;
 
@@ -19,30 +19,30 @@ public class CountryServiceImpl implements CountryService {
         this.countryDao = countryDao;
     }
 
-    public List<Country> getAllCountries() {
+    public List<CountryEntity> getAllCountries() {
         return countryDao.findAllCountries();
     }
 
-    public Country getCountryById(int id) {
+    public CountryEntity getCountryById(int id) {
         if (!allNotEmpty(id, countryDao.findById(id)))
             throw new EntityNotFoundException("No country found for id=" + id);
 
         return countryDao.findById(id);
     }
 
-    public List<Country> getCountryByName(String name) {
+    public List<CountryEntity> getCountryByName(String name) {
         return countryDao.findByName(name);
     }
 
-    public Country createCountry(Country country) {
-        return countryDao.create(country);
+    public CountryEntity createCountry(CountryEntity countryEntity) {
+        return countryDao.create(countryEntity);
     }
 
-    public Country updateCountry(Country country) {
-        if (!allNotEmpty(country, country.getId(), countryDao.findById(country.getId())))
-            throw new EntityNotFoundException("No country found for id=" + country.getId());
+    public CountryEntity updateCountry(CountryEntity countryEntity) {
+        if (!allNotEmpty(countryEntity, countryEntity.getId(), countryDao.findById(countryEntity.getId())))
+            throw new EntityNotFoundException("No countryEntity found for id=" + countryEntity.getId());
 
-        return countryDao.update(country);
+        return countryDao.update(countryEntity);
     }
 
     public void deleteCountry(int id) {

@@ -2,8 +2,8 @@ package com.example.sdd.mapper;
 
 import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.CountryDto;
-import com.example.sdd.entity.Person;
-import com.example.sdd.entity.Country;
+import com.example.sdd.entity.CountryEntity;
+import com.example.sdd.entity.PersonEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -16,20 +16,20 @@ public class GeoMapper {
         this.modelMapper = modelMapper;
     }
 
-    public PersonDto convertToDto(Person person) {
-        return modelMapper.map(person, PersonDto.class);
+    public PersonDto convertToDto(PersonEntity personEntity) {
+        return modelMapper.map(personEntity, PersonDto.class);
     }
 
-    public Person convertToEntity(PersonDto personDto) {
-        return modelMapper.map(personDto, Person.class);
+    public PersonEntity convertToEntity(PersonDto personDto) {
+        return modelMapper.map(personDto, PersonEntity.class);
     }
 
-    public CountryDto convertToDto(Country country) {
-        return modelMapper.map(country, CountryDto.class);
+    public CountryDto convertToDto(CountryEntity countryEntity) {
+        return modelMapper.map(countryEntity, CountryDto.class);
     }
 
-    public Country convertToEntity(CountryDto countryDto) {
-        return modelMapper.map(countryDto, Country.class);
+    public CountryEntity convertToEntity(CountryDto countryDto) {
+        return modelMapper.map(countryDto, CountryEntity.class);
     }
 
 }

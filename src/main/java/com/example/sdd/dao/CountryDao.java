@@ -1,20 +1,20 @@
 package com.example.sdd.dao;
 
-import com.example.sdd.entity.Country;
+import com.example.sdd.entity.CountryEntity;
 
 import java.util.List;
 
 public interface CountryDao {
 
-    List<Country> findAllCountries();
+    List<CountryEntity> findAllCountries();
 
-    Country findById(int id);
+    CountryEntity findById(int id);
 
-    List<Country> findByName(String name);
+    List<CountryEntity> findByName(String name);
 
-    Country create(Country country);
+    CountryEntity create(CountryEntity countryEntity);
 
-    Country update(Country country);
+    CountryEntity update(CountryEntity countryEntity);
 
     void delete(int id);
 

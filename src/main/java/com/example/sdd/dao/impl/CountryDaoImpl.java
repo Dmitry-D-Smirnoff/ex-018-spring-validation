@@ -1,8 +1,8 @@
 package com.example.sdd.dao.impl;
 
 import com.example.sdd.dao.CountryDao;
-import com.example.sdd.entity.Country;
-import com.example.sdd.entity.Person;
+import com.example.sdd.entity.CountryEntity;
+import com.example.sdd.entity.PersonEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,41 +17,41 @@ public class CountryDaoImpl implements CountryDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Country> findAllCountries() {
-        return entityManager.createNamedQuery("Country.findAll", Country.class).getResultList();
+    public List<CountryEntity> findAllCountries() {
+        return entityManager.createNamedQuery("CountryEntity.findAll", CountryEntity.class).getResultList();
     }
 
-    public Country findById(int id) {
-        return entityManager.find(Country.class, id);
+    public CountryEntity findById(int id) {
+        return entityManager.find(CountryEntity.class, id);
     }
 
-    public List<Country> findByName(String name) {
-        return entityManager.createNamedQuery("Country.findByName", Country.class)
+    public List<CountryEntity> findByName(String name) {
+        return entityManager.createNamedQuery("CountryEntity.findByName", CountryEntity.class)
                 .setParameter("name", name).getResultList();
     }
 
-    public Country create(Country country) {
-        entityManager.persist(country);
-        return country;
+    public CountryEntity create(CountryEntity countryEntity) {
+        entityManager.persist(countryEntity);
+        return countryEntity;
     }
 
-    public Country update(Country country) {
-        for (Person person : country.getPersons()) {
-            Person existingPerson = entityManager.find(Person.class, person.getId());
-            if (existingPerson != null) {
-                existingPerson.setPersonName(person.getPersonName());
-                entityManager.merge(existingPerson);
+    public CountryEntity update(CountryEntity countryEntity) {
+        for (PersonEntity personEntity : countryEntity.getPersons()) {
+            PersonEntity existingPersonEntity = entityManager.find(PersonEntity.class, personEntity.getId());
+            if (existingPersonEntity != null) {
+                existingPersonEntity.setPersonName(personEntity.getPersonName());
+                entityManager.merge(existingPersonEntity);
             } else {
-                entityManager.persist(person);
+                entityManager.persist(personEntity);
             }
         }
-        return entityManager.merge(country);
+        return entityManager.merge(countryEntity);
     }
 
     public void delete(int id) {
-        Country country = entityManager.find(Country.class, id);
-        if (country != null) {
-            entityManager.remove(country);
+        CountryEntity countryEntity = entityManager.find(CountryEntity.class, id);
+        if (countryEntity != null) {
+            entityManager.remove(countryEntity);
         }
     }
 

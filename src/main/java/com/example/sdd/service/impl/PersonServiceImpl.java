@@ -1,7 +1,7 @@
 package com.example.sdd.service.impl;
 
 import com.example.sdd.dao.PersonDao;
-import com.example.sdd.entity.Person;
+import com.example.sdd.entity.PersonEntity;
 import com.example.sdd.service.PersonService;
 import org.springframework.stereotype.Service;
 
@@ -19,30 +19,30 @@ public class PersonServiceImpl implements PersonService {
         this.personDao = personDao;
     }
 
-    public List<Person> getAllPersons() {
+    public List<PersonEntity> getAllPersons() {
         return personDao.findAllPersons();
     }
 
-    public Person getPersonById(int id) {
+    public PersonEntity getPersonById(int id) {
         if (!allNotEmpty(id, personDao.findById(id)))
             throw new EntityNotFoundException("No person found for id=" + id);
 
         return personDao.findById(id);
     }
 
-    public List<Person> getPersonByName(String name) {
+    public List<PersonEntity> getPersonByName(String name) {
         return personDao.findByName(name);
     }
 
-    public Person createPerson(Person person) {
-        return personDao.create(person);
+    public PersonEntity createPerson(PersonEntity personEntity) {
+        return personDao.create(personEntity);
     }
 
-    public Person updatePerson(Person person) {
-        if (!allNotEmpty(person, person.getId(), personDao.findById(person.getId())))
-            throw new EntityNotFoundException("No person found for id=" + person.getId());
+    public PersonEntity updatePerson(PersonEntity personEntity) {
+        if (!allNotEmpty(personEntity, personEntity.getId(), personDao.findById(personEntity.getId())))
+            throw new EntityNotFoundException("No personEntity found for id=" + personEntity.getId());
 
-        return personDao.update(person);
+        return personDao.update(personEntity);
     }
 
     public void deletePerson(int id) {

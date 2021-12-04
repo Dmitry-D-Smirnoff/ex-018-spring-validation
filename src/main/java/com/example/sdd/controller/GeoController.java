@@ -4,18 +4,17 @@ import com.example.sdd.dto.CountryDto;
 import com.example.sdd.dto.PersonDto;
 import com.example.sdd.dto.validation.CountryDtoValidator;
 import com.example.sdd.dto.validation.PersonDtoValidator;
-import com.example.sdd.dto.validation.group.CountryDtoCreateGroup;
-import com.example.sdd.dto.validation.group.CountryDtoUpdateGroup;
-import com.example.sdd.dto.validation.group.PersonDtoCreateGroup;
-import com.example.sdd.dto.validation.group.PersonDtoUpdateGroup;
-import com.example.sdd.entity.Country;
-import com.example.sdd.entity.Person;
-import com.example.sdd.entity.validation.CountryValidator;
-import com.example.sdd.entity.validation.PersonValidator;
+import com.example.sdd.dto.validation.group.CountryCreate;
+import com.example.sdd.dto.validation.group.CountryUpdate;
+import com.example.sdd.dto.validation.group.PersonCreate;
+import com.example.sdd.dto.validation.group.PersonUpdate;
+import com.example.sdd.entity.CountryEntity;
+import com.example.sdd.entity.PersonEntity;
+import com.example.sdd.entity.validation.CountryEntityValidator;
+import com.example.sdd.entity.validation.PersonEntityValidator;
 import com.example.sdd.mapper.GeoMapper;
 import com.example.sdd.service.CountryService;
 import com.example.sdd.service.PersonService;
-import com.example.sdd.validation.ValidatedAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -45,8 +44,11 @@ public class GeoController {
     private final PersonService personService;
     private final CountryService countryService;
 
-    private final PersonValidator personValidator;
-    private final CountryValidator countryValidator;
+    private final PersonDtoValidator personDtoValidator;
+    private final CountryDtoValidator countryDtoValidator;
+
+    private final PersonEntityValidator personEntityValidator;
+    private final CountryEntityValidator countryEntityValidator;
 
     private final GeoMapper geoMapper;
 
@@ -54,24 +56,28 @@ public class GeoController {
             PersonService personService,
             CountryService countryService,
             GeoMapper geoMapper,
-            PersonValidator personValidator,
-            CountryValidator countryValidator
+            PersonEntityValidator personEntityValidator,
+            CountryEntityValidator countryEntityValidator,
+            PersonDtoValidator personDtoValidator,
+            CountryDtoValidator countryDtoValidator
     ) {
         this.personService = personService;
         this.countryService = countryService;
         this.geoMapper = geoMapper;
-        this.personValidator = personValidator;
-        this.countryValidator = countryValidator;
+        this.personEntityValidator = personEntityValidator;
+        this.countryEntityValidator = countryEntityValidator;
+        this.personDtoValidator = personDtoValidator;
+        this.countryDtoValidator = countryDtoValidator;
     }
 
     @InitBinder("countryDto")
     protected void initCountryDtoBinder(WebDataBinder binder) {
-        binder.setValidator(new CountryDtoValidator());
+        binder.setValidator(countryDtoValidator);
     }
 
     @InitBinder("personDto")
     protected void initPersonDtoBinder(WebDataBinder binder) {
-        binder.setValidator(new PersonDtoValidator());
+        binder.setValidator(personDtoValidator);
     }
 
     @GetMapping("/countries")
@@ -92,22 +98,66 @@ public class GeoController {
         return countryService.getCountryByName(name).stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
-    @Validated(CountryDtoCreateGroup.class)
+    // 1. @Validated(...) обязательна для полной Java-валидации в DTO-классе.
+    // 1.1. Только в этом случае учитывается проверка по JSR-303-группам валидации.
+    @Validated(CountryCreate.class)
     @PostMapping("/countries")
     @ResponseStatus(HttpStatus.CREATED)
-    public CountryDto createCountry(@RequestBody @Valid CountryDto countryDto) {
-        Country country = geoMapper.convertToEntity(countryDto);
-        countryValidator.validate(country, ValidatedAction.ACTION_COUNTRY_CREATE, Country.class);
-        return geoMapper.convertToDto(countryService.createCountry(country));
+    public CountryDto createCountry(
+            // 2. Наличие @Valid обязательно для корректной Java-валидации в DTO-классе.
+            // 3. Наличие @Validated(...) нужно для запуска Spring-валидатора SmartValidator.
+            // 3.1. @Validated(...) обязательно должна предшествовать @Valid
+            // Иначе код Spring-валидации пропустит указанную JSR-303-группу. Код содержит неточности.
+            // Тогда Spring отработает как Validator, не вызывая метод из SmartValidator с Object... hints.
+            @RequestBody @Validated(CountryCreate.class) @Valid CountryDto countryDto
+    ) {
+        CountryEntity countryEntity = geoMapper.convertToEntity(countryDto);
+        countryEntityValidator.validate(countryEntity, CountryCreate.class, CountryEntity.class);
+        return geoMapper.convertToDto(countryService.createCountry(countryEntity));
+    }
+/*
+Порядок аннотаций из п.3.1. важен из-за грубо написанного кода ниже в классе
+org.springframework.web.method.annotation.ModelAttributeMethodProcessor.
+Т.е. первая попавшаяся аннотация валидации прервет обработку.
+И если это - универсальная @Valid из Java-валидации, то SmartValidator не будет вызван.
+
+    protected void validateIfApplicable(WebDataBinder binder, MethodParameter parameter) {
+        for (Annotation ann : parameter.getParameterAnnotations()) {
+            Object[] validationHints = ValidationAnnotationUtils.determineValidationHints(ann);
+            if (validationHints != null) {
+                binder.validate(validationHints);
+                break;
+            }
+        }
     }
 
-    @Validated(CountryDtoUpdateGroup.class)
+    @Nullable
+    public static Object[] determineValidationHints(Annotation ann) {
+        Class<? extends Annotation> annotationType = ann.annotationType();
+        String annotationName = annotationType.getName();
+        if ("javax.validation.Valid".equals(annotationName)) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+        Validated validatedAnn = AnnotationUtils.getAnnotation(ann, Validated.class);
+        if (validatedAnn != null) {
+            Object hints = validatedAnn.value();
+            return convertValidationHints(hints);
+        }
+        if (annotationType.getSimpleName().startsWith("Valid")) {
+            Object hints = AnnotationUtils.getValue(ann);
+            return convertValidationHints(hints);
+        }
+        return null;
+    }
+*/
+
+    @Validated(CountryUpdate.class)
     @PutMapping("/countries")
     @ResponseStatus(HttpStatus.OK)
-    public CountryDto updateCountry(@RequestBody @Valid CountryDto countryDto) {
-        Country country = geoMapper.convertToEntity(countryDto);
-        countryValidator.validate(country, ValidatedAction.ACTION_COUNTRY_UPDATE, Country.class);
-        return geoMapper.convertToDto(countryService.updateCountry(country));
+    public CountryDto updateCountry(@RequestBody @Validated(CountryUpdate.class) @Valid CountryDto countryDto) {
+        CountryEntity countryEntity = geoMapper.convertToEntity(countryDto);
+        countryEntityValidator.validate(countryEntity, CountryUpdate.class, CountryEntity.class);
+        return geoMapper.convertToDto(countryService.updateCountry(countryEntity));
     }
 
     @DeleteMapping("/countries/{countryId}")
@@ -134,22 +184,22 @@ public class GeoController {
         return personService.getPersonByName(name).stream().map(geoMapper::convertToDto).collect(Collectors.toList());
     }
 
-    @Validated(PersonDtoCreateGroup.class)
+    @Validated(PersonCreate.class)
     @PostMapping("/persons")
     @ResponseStatus(HttpStatus.CREATED)
-    public PersonDto createPerson(@RequestBody @Valid PersonDto personDto) {
-        Person person = geoMapper.convertToEntity(personDto);
-        personValidator.validate(person, ValidatedAction.ACTION_PERSON_CREATE, Person.class);
-        return geoMapper.convertToDto(personService.createPerson(person));
+    public PersonDto createPerson(@RequestBody @Validated(PersonCreate.class) @Valid PersonDto personDto) {
+        PersonEntity personEntity = geoMapper.convertToEntity(personDto);
+        personEntityValidator.validate(personEntity, PersonCreate.class, PersonEntity.class);
+        return geoMapper.convertToDto(personService.createPerson(personEntity));
     }
 
-    @Validated(PersonDtoUpdateGroup.class)
+    @Validated(PersonUpdate.class)
     @PutMapping("/persons")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto updatePerson(@RequestBody @Valid PersonDto personDto) {
-        Person person = geoMapper.convertToEntity(personDto);
-        personValidator.validate(person, ValidatedAction.ACTION_PERSON_UPDATE, Person.class);
-        return geoMapper.convertToDto(personService.updatePerson(person));
+    public PersonDto updatePerson(@RequestBody @Validated(PersonUpdate.class) @Valid PersonDto personDto) {
+        PersonEntity personEntity = geoMapper.convertToEntity(personDto);
+        personEntityValidator.validate(personEntity, PersonUpdate.class, PersonEntity.class);
+        return geoMapper.convertToDto(personService.updatePerson(personEntity));
     }
 
     @DeleteMapping("/persons/{personId}")

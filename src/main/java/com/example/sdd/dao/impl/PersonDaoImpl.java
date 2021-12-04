@@ -1,7 +1,7 @@
 package com.example.sdd.dao.impl;
 
 import com.example.sdd.dao.PersonDao;
-import com.example.sdd.entity.Person;
+import com.example.sdd.entity.PersonEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,47 +20,47 @@ public class PersonDaoImpl implements PersonDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Person> findAllPersons() {
-        return entityManager.createNamedQuery("Person.findAll", Person.class).getResultList();
+    public List<PersonEntity> findAllPersons() {
+        return entityManager.createNamedQuery("PersonEntity.findAll", PersonEntity.class).getResultList();
     }
 
-    public Person findById(int id) {
-        return entityManager.find(Person.class, id);
+    public PersonEntity findById(int id) {
+        return entityManager.find(PersonEntity.class, id);
     }
 
-    public List<Person> findByName(String name) {
-        return entityManager.createNamedQuery("Person.findByName", Person.class)
+    public List<PersonEntity> findByName(String name) {
+        return entityManager.createNamedQuery("PersonEntity.findByName", PersonEntity.class)
                 .setParameter("name", name).getResultList();
     }
 
-    public Person create(Person Person) {
-        entityManager.persist(Person);
-        return Person;
+    public PersonEntity create(PersonEntity PersonEntity) {
+        entityManager.persist(PersonEntity);
+        return PersonEntity;
     }
 
-    public Person update(Person person) {
+    public PersonEntity update(PersonEntity personEntity) {
         //TODO: Перенести проверку в валидатор сущности?
-        if (entityManager.find(Person.class, person.getId()) == null)
-            throw new EntityNotFoundException("No Person found for id=" + person.getId());
-        return entityManager.merge(person);
+        if (entityManager.find(PersonEntity.class, personEntity.getId()) == null)
+            throw new EntityNotFoundException("No PersonEntity found for id=" + personEntity.getId());
+        return entityManager.merge(personEntity);
     }
 
     public void delete(int id) {
-        Person Person = entityManager.find(Person.class, id);
-        if (Person != null) {
-            entityManager.remove(Person);
+        PersonEntity PersonEntity = entityManager.find(PersonEntity.class, id);
+        if (PersonEntity != null) {
+            entityManager.remove(PersonEntity);
         }
     }
 
-    private Person findPersonByName(String personName) {
+    private PersonEntity findPersonByName(String personName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         ParameterExpression<String> paramName = criteriaBuilder.parameter(String.class);
-        CriteriaQuery<Person> query = criteriaBuilder.createQuery(Person.class);
+        CriteriaQuery<PersonEntity> query = criteriaBuilder.createQuery(PersonEntity.class);
         query
-                .select(query.from(Person.class))
-                .where(criteriaBuilder.equal(query.from(Person.class).get("personName"), paramName));
+                .select(query.from(PersonEntity.class))
+                .where(criteriaBuilder.equal(query.from(PersonEntity.class).get("personName"), paramName));
 
-        List<Person> result = entityManager.createQuery(query).setParameter(paramName, personName).getResultList();
+        List<PersonEntity> result = entityManager.createQuery(query).setParameter(paramName, personName).getResultList();
 
         if (result == null || result.isEmpty())
             return null;

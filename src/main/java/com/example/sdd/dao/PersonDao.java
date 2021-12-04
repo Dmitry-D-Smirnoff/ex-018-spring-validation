@@ -1,20 +1,20 @@
 package com.example.sdd.dao;
 
-import com.example.sdd.entity.Person;
+import com.example.sdd.entity.PersonEntity;
 
 import java.util.List;
 
 public interface PersonDao {
 
-    List<Person> findAllPersons();
+    List<PersonEntity> findAllPersons();
 
-    Person findById(int id);
+    PersonEntity findById(int id);
 
-    List<Person> findByName(String name);
+    List<PersonEntity> findByName(String name);
 
-    Person create(Person person);
+    PersonEntity create(PersonEntity personEntity);
 
-    Person update(Person person);
+    PersonEntity update(PersonEntity personEntity);
 
     void delete(int id);
 

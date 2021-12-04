@@ -1,6 +1,6 @@
 package com.example.sdd.service;
 
-import com.example.sdd.entity.Person;
+import com.example.sdd.entity.PersonEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.List;
 @Service
 public interface PersonService {
 
-    List<Person> getAllPersons();
+    List<PersonEntity> getAllPersons();
 
-    Person getPersonById(int id);
+    PersonEntity getPersonById(int id);
 
-    List<Person> getPersonByName(String name);
+    List<PersonEntity> getPersonByName(String name);
 
-    Person createPerson(Person person);
+    PersonEntity createPerson(PersonEntity personEntity);
 
-    Person updatePerson(Person person);
+    PersonEntity updatePerson(PersonEntity personEntity);
 
     void deletePerson(int id);
 

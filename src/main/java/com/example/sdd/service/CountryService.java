@@ -1,6 +1,6 @@
 package com.example.sdd.service;
 
-import com.example.sdd.entity.Country;
+import com.example.sdd.entity.CountryEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,15 +8,15 @@ import java.util.List;
 @Service
 public interface CountryService {
 
-    List<Country> getAllCountries();
+    List<CountryEntity> getAllCountries();
 
-    Country getCountryById(int id);
+    CountryEntity getCountryById(int id);
 
-    List<Country> getCountryByName(String name);
+    List<CountryEntity> getCountryByName(String name);
 
-    Country createCountry(Country country);
+    CountryEntity createCountry(CountryEntity countryEntity);
 
-    Country updateCountry(Country country);
+    CountryEntity updateCountry(CountryEntity countryEntity);
 
     void deleteCountry(int id);
 

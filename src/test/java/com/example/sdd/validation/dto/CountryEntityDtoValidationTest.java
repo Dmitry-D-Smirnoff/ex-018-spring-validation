@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-public class CountryDtoValidationTest {
+public class CountryEntityDtoValidationTest {
 
     @Autowired
     private CountryDtoValidator countryDtoValidator;
